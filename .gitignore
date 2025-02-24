@@ -1,0 +1,28 @@
+# Python Bytecode
+__pycache__/
+*.py[cod]
+
+# Environment Variables
+.env
+
+# Model files
+models/
+logs/
+*.log
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
+
+# System files
+.DS_Store
+
+# Environment variables
+.env
