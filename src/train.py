@@ -6,7 +6,7 @@ import torch
 from datasets import Dataset
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-# Construct the absolute path dynamically
+# Constructed the absolute path dynamically
 def get_cleaned_data_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(current_dir, "../data/cleaned_data.csv")
