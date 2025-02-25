@@ -8,6 +8,23 @@ import jwt
 from datetime import datetime, timedelta
 from typing import Optional
 from dotenv import load_dotenv
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from fastapi import Request
+from slowapi.errors import RateLimitExceeded
+from fastapi.responses import JSONResponse
+import logging
+from sqlalchemy.orm import Session
+from database import SessionLocal
+from utils import verify_password, get_user_by_username
+
+
+# Configure logging
+logging.basicConfig(
+    filename='logs/api_logs.log',  # Log file
+    level=logging.INFO,            # Log level
+    format='%(asctime)s - %(levelname)s - %(message)s'  # Log format
+)
 
 
 # Initialize FastAPI app
@@ -42,13 +59,24 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-# Authentication endpoint (mock user login)
+
+# Dependency to get a DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# Authentication endpoint 
 @app.post("/token")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    # Mock authentication (Replace with real authentication logic)
-    if form_data.username != "admin" or form_data.password != "password":
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = get_user_by_username(db, form_data.username)
+    if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Incorrect username or password")
-    access_token = create_access_token(data={"sub": form_data.username})
+    
+    access_token = create_access_token(data={"sub": user.username, "role": user.role})
     return {"access_token": access_token, "token_type": "bearer"}
 
 # Token verification function
@@ -60,6 +88,21 @@ def verify_token(token: str = Security(oauth2_scheme)):
         raise HTTPException(status_code=401, detail="Token expired")
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
+
+# Verify if the user has admin privileges
+def admin_required(token_data: dict = Depends(verify_token)):
+    if token_data.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin privileges required")
+
+# Protected route: Only accessible by admins
+@app.get("/admin-only/")
+async def admin_route(token_data: dict = Depends(admin_required)):
+    return {"message": "Welcome, Admin! You have access to this route."}
+
+# Protected route: Accessible by any authenticated user
+@app.get("/user-only/")
+async def user_route(token_data: dict = Depends(verify_token)):
+    return {"message": f"Welcome, {token_data.get('sub')}! You have user access."}
 
 # Prediction function
 def predict_sentiment(text: str):
@@ -77,12 +120,33 @@ from pydantic import BaseModel
 class SentimentRequest(BaseModel):
     text: str
 
+# Initialize the rate limiter
+limiter = Limiter(key_func=get_remote_address)
+
+# Add rate limit exception handler
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"error": "Rate limit exceeded. Please try again later."}
+    )
+
 # API endpoint
 @app.post("/predict/")
-async def analyze_sentiment(request: SentimentRequest, token: str = Depends(verify_token)):
-    text = request.text
+@limiter.limit("100/minute")  # 100 requests per minute
+async def analyze_sentiment(request: Request, input_data: SentimentRequest, token: str = Depends(verify_token)):
+    text = input_data.text
     sentiment = predict_sentiment(text)
+    logging.info(f"User: {token['sub']} | Input Text: {text} | Sentiment: {sentiment}")
     return {"text": text, "sentiment": sentiment}
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logging.error(f"Unexpected Error: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"error": "An internal server error occurred. Please try again later."}
+    )
 
 
 # Run the API server
