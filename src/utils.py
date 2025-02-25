@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from database import User
+from src.database import User
 
 # Hashing context for passwords
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
