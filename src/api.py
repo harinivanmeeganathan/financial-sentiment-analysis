@@ -15,8 +15,8 @@ from slowapi.errors import RateLimitExceeded
 from fastapi.responses import JSONResponse
 import logging
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from utils import verify_password, get_user_by_username
+from src.database import SessionLocal
+from src.utils import verify_password, get_user_by_username
 
 
 # Configure logging
