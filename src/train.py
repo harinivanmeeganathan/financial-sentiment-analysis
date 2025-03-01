@@ -82,8 +82,8 @@ def train_huggingface_model(data):
     trainer.train()
 
     # Save the model and tokenizer
-    model.save_pretrained("../models/sentiment_model")
-    tokenizer.save_pretrained("../models/sentiment_model")
+    model.save_pretrained("models/sentiment_model")
+    tokenizer.save_pretrained("models/sentiment_model")
 
     # Evaluate the model
     predictions = trainer.predict(test_dataset)
