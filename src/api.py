@@ -19,11 +19,15 @@ from src.database import SessionLocal
 from src.utils import verify_password, get_user_by_username
 
 
+LOG_DIR = os.path.join(os.path.dirname(__file__), "../logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+
 # Configure logging
+LOG_FILE = os.path.join(LOG_DIR, "api_logs.log")
 logging.basicConfig(
-    filename='logs/api_logs.log',  # Log file
-    level=logging.INFO,            # Log level
-    format='%(asctime)s - %(levelname)s - %(message)s'  # Log format
+    filename=LOG_FILE, 
+    level=logging.INFO, 
+    format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 
