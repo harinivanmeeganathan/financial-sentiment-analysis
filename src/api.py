@@ -39,7 +39,7 @@ logging.basicConfig(
 app = FastAPI()
 
 # Load model and tokenizer
-MODEL_PATH = "src/models"
+MODEL_PATH = "src/models/sentiment_model"
 
 # Load model with authentication
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
