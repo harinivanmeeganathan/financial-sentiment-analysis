@@ -21,11 +21,15 @@ from src.utils import verify_password, get_user_by_username
 # Hugging Face Authentication Token
 HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
+# Ensure the model path exists
+if not os.path.isdir(MODEL_PATH):
+    raise FileNotFoundError(f"Error: Model directory not found at {MODEL_PATH}. Trained model --- saved")
+
 # Load model and tokenizer
 
 # Define absolute path to avoid loading issues
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get `src/` path
-MODEL_PATH = os.path.join(BASE_DIR, "models/sentiment_model")
+MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "../models/sentiment_model"))
 print(f"Loading model from: {MODEL_PATH}")
 
 
@@ -47,8 +51,9 @@ app = FastAPI()
 
 
 # Load model with authentication
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH, local_files_only=True)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, local_files_only=True)
+
 
 # Set model to evaluation mode
 model.eval()
