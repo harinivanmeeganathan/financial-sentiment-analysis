@@ -29,3 +29,5 @@ env/
 
 # Ignore database files
 database/
+
+src/models/
