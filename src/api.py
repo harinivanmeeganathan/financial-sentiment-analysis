@@ -21,6 +21,12 @@ from src.utils import verify_password, get_user_by_username
 # Hugging Face Authentication Token
 HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
+# Load model and tokenizer
+
+# Define absolute path to avoid loading issues
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get `src/` path
+MODEL_PATH = os.path.join(BASE_DIR, "models/sentiment_model")
+print(f"Loading model from: {MODEL_PATH}")
 
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), "../logs")
@@ -38,8 +44,7 @@ logging.basicConfig(
 # Initialize FastAPI app
 app = FastAPI()
 
-# Load model and tokenizer
-MODEL_PATH = "src/models/sentiment_model"
+
 
 # Load model with authentication
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
