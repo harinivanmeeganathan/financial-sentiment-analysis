@@ -18,6 +18,14 @@ from sqlalchemy.orm import Session
 from src.database import SessionLocal
 from src.utils import verify_password, get_user_by_username
 
+# Hugging Face Authentication Token
+HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
+
+MODEL_PATH = "harinivanmeeganathan/sentiment_model"
+
+# Load model with authentication
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH, use_auth_token=HF_TOKEN)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, use_auth_token=HF_TOKEN)
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), "../logs")
 os.makedirs(LOG_DIR, exist_ok=True)
