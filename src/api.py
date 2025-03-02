@@ -21,9 +21,7 @@ from src.utils import verify_password, get_user_by_username
 # Hugging Face Authentication Token
 HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
-# Ensure the model path exists
-if not os.path.isdir(MODEL_PATH):
-    raise FileNotFoundError(f"Error: Model directory not found at {MODEL_PATH}. Trained model --- saved")
+
 
 # Load model and tokenizer
 
@@ -32,7 +30,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get `src/` path
 MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "../models/sentiment_model"))
 print(f"Loading model from: {MODEL_PATH}")
 
-
+# Ensure the model path exists
+if not os.path.isdir(MODEL_PATH):
+    raise FileNotFoundError(f"Error: Model directory not found at {MODEL_PATH}. Trained model --- saved")
 LOG_DIR = os.path.join(os.path.dirname(__file__), "../logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 
