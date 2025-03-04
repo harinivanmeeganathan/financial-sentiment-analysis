@@ -82,7 +82,7 @@ def train_huggingface_model(data):
     trainer.train()
 
     # Save the model and tokenizer
-    SAVE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../models/sentiment_model"))
+    SAVE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "/models/sentiment_model"))
     model.save_pretrained(SAVE_PATH)
     tokenizer.save_pretrained(SAVE_PATH)
 

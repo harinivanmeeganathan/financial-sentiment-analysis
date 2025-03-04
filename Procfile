@@ -1,1 +1,1 @@
-web: uvicorn src.api:app --host=0.0.0.0 --port=8000
+web: PYTHONPATH=/opt/render/project/src python -m uvicorn src.api:app --host=0.0.0.0 --port=8000

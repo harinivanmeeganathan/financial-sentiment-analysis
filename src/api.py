@@ -15,19 +15,23 @@ from slowapi.errors import RateLimitExceeded
 from fastapi.responses import JSONResponse
 import logging
 from sqlalchemy.orm import Session
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.database import SessionLocal
 from src.utils import verify_password, get_user_by_username
+
+
 
 # Hugging Face Authentication Token
 HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
-
+ 
 
 # Load model and tokenizer
 
 # Define absolute path to avoid loading issues
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get `src/` path
-MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "../models/sentiment_model"))
+MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "models", "sentiment_model"))
 print(f"Loading model from: {MODEL_PATH}")
 
 # Ensure the model path exists
