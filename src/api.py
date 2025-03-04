@@ -27,16 +27,8 @@ HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
  
 
-# Load model and tokenizer
 
-# Define absolute path to avoid loading issues
-from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "models" / "sentiment_model"
-
-if not MODEL_PATH.exists():
-    raise FileNotFoundError(f"Error: Model directory not found at {MODEL_PATH}. Make sure the trained model is uploaded.")
 
 # Ensure the model path exists
 if not os.path.isdir(MODEL_PATH):
@@ -58,9 +50,12 @@ app = FastAPI()
 
 
 
+# Load model and tokenizer
 # Load model with authentication
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH, local_files_only=True)
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, local_files_only=True)
+MODEL_NAME = "harinivanmeeganathan/financial-sentiment-model"
+
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 
 # Set model to evaluation mode
