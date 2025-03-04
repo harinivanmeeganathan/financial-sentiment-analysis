@@ -19,7 +19,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.database import SessionLocal
 from src.utils import verify_password, get_user_by_username
-
+from pathlib import Path
 
 
 # Hugging Face Authentication Token
@@ -30,9 +30,14 @@ HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 # Load model and tokenizer
 
 # Define absolute path to avoid loading issues
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get `src/` path
-MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "models", "sentiment_model"))
-print(f"Loading model from: {MODEL_PATH}")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / "models" / "sentiment_model"
+
+if not MODEL_PATH.exists():
+    raise FileNotFoundError(f"Error: Model directory not found at {MODEL_PATH}. Make sure the trained model is uploaded.")
+)
 
 # Ensure the model path exists
 if not os.path.isdir(MODEL_PATH):

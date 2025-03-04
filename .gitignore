@@ -30,7 +30,7 @@ env/
 # Ignore database files
 database/
 
-src/models/
-models/
-models/*.pth
-
+# Ignore all models, except the sentiment model
+models/*
+!models/sentiment_model/
+!models/sentiment_model/*
