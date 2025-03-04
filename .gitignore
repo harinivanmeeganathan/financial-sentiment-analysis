@@ -31,3 +31,6 @@ env/
 database/
 
 src/models/
+models/
+models/*.pth
+

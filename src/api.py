@@ -31,7 +31,7 @@ HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
 # Define absolute path to avoid loading issues
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get `src/` path
-MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "models", "sentiment_model"))
+MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "models", "sentiment_model"))
 print(f"Loading model from: {MODEL_PATH}")
 
 # Ensure the model path exists
