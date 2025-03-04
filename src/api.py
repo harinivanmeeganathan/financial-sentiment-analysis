@@ -37,7 +37,6 @@ MODEL_PATH = BASE_DIR / "models" / "sentiment_model"
 
 if not MODEL_PATH.exists():
     raise FileNotFoundError(f"Error: Model directory not found at {MODEL_PATH}. Make sure the trained model is uploaded.")
-)
 
 # Ensure the model path exists
 if not os.path.isdir(MODEL_PATH):
