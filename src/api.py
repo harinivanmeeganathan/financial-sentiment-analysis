@@ -47,8 +47,18 @@ app = FastAPI()
 # Load model with authentication
 MODEL_NAME = "harinivanmeeganathan/financial-sentiment-model"
 
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+# Load model with authentication
+model = AutoModelForSequenceClassification.from_pretrained(
+    MODEL_NAME, 
+    use_auth_token=HF_TOKEN 
+)
+tokenizer = AutoTokenizer.from_pretrained(
+    MODEL_NAME, 
+    use_auth_token=HF_TOKEN
+)
+
+#model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+#tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 
 # Set model to evaluation mode
