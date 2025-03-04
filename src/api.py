@@ -25,14 +25,7 @@ from pathlib import Path
 # Hugging Face Authentication Token
 HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
- 
-
-
-
-
-# Ensure the model path exists
-if not os.path.isdir(MODEL_PATH):
-    raise FileNotFoundError(f"Error: Model directory not found at {MODEL_PATH}. Trained model --- saved")
+# Set up logging directory
 LOG_DIR = os.path.join(os.path.dirname(__file__), "../logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 
