@@ -50,11 +50,11 @@ MODEL_NAME = "harinivanmeeganathan/financial-sentiment-model"
 # Load model with authentication
 model = AutoModelForSequenceClassification.from_pretrained(
     MODEL_NAME, 
-    use_auth_token=HF_TOKEN 
+    token=HF_TOKEN 
 )
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_NAME, 
-    use_auth_token=HF_TOKEN
+    token=HF_TOKEN
 )
 
 #model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
