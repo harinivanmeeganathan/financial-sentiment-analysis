@@ -104,6 +104,10 @@ def admin_required(token_data: dict = Depends(verify_token)):
         raise HTTPException(status_code=403, detail="Admin privileges required")
 
 # Authentication endpoint
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Sentiment Analysis API!"}
+
 @app.post("/token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = get_user_by_username(db, form_data.username)
