@@ -57,8 +57,8 @@ tokenizer = AutoTokenizer.from_pretrained(
     token=HF_TOKEN
 )
 
-#model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
-#tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 
 # Set model to evaluation mode
